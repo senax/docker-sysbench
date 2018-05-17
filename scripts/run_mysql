@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export MYSQL_USER=sysbench
+export MYSQL_PASSWORD=secret
+export MYSQL_DATABASE=sysbench
+
+docker run -d --rm --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_ROOT_HOST='%' -e MYSQL_USER -e MYSQL_PASSWORD -e MYSQL_DATABASE -p 3306:3306 mysql/mysql-server:5.7

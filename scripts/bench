@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "run test"
+
+sysbench /usr/local/share/sysbench/oltp_read_write.lua --events=$EVENTS --time=$TIMELIMIT --threads=$THREADS --mysql-db=sysbench --mysql-user=$MYSQL_USER --mysql-password=$MYSQL_PASSWORD --db-driver=mysql --mysql-host=$MYSQL_HOST run
+
+  # sysbench --test=/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua --oltp-table-size=2000000 --max-time=300 --max-requests=50000 --mysql-table-engine=innodb --mysql-d  b=sysbench --mysql-user=sysbench --mysql-password=secret --num-threads=64 --oltp-test-mode=complex run
+

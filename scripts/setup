@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo "setup test"
+
+
+mysql -u $MYSQL_USER --password=$MYSQL_PASSWORD -h $MYSQL_HOST -e "drop database if exists sysbench; CREATE DATABASE sysbench;"
+
+SIZE=${SIZE:-1}
+SIZE_UNIT=${SIZE_UNIT:-GB}
+
+FACTOR=3664286 # records per gigabyte
+FACTOR=3578 # records per MB
+
+if [ $SIZE_UNIT != "MB" ]; then
+  # if it's not MB then it is GB, tough cookie.
+  SIZE=$(( SIZE * 1024 ))
+fi
+
+#SIZE=10 ; TABLES=1 #.28616100000000000000 KByte/record
+#SIZE=100000 ; TABLES=1 # 29 + 210 base
+#SIZE=100000 ; TABLES=10 # 500 total incl. 210 base = 290
+#SIZE=200000 ; TABLES=10 # 771 total incl. 210 base = 561 * 1024 * 1024
+## 602369163264 bytes / 10 * 200000 = 301184.58163200000000000000 = 294 Bytes/record.
+#SIZE=200000 ; TABLES=20 # 1.3GB total incl. 210 base = 561 * 1024 * 1024 =
+
+sysbench /usr/local/share/sysbench/oltp_read_write.lua --threads=$THREADS --tables=$THREADS --table_size=$(( FACTOR * SIZE / THREADS )) --mysql-db=sysbench --mysql-user=$MYSQL_USER --mysql-password=$MYSQL_PASSWORD --db-driver=mysql --mysql-host=$MYSQL_HOST prepare
+
+  # sysbench --test=/usr/share/sysbench/tests/include/oltp_legacy/oltp.lua --oltp-table-size=2000000 --max-time=300 --max-requests=50000 --mysql-table-engine=innodb --mysql-d  b=sysbench --mysql-user=sysbench --mysql-password=secret --num-threads=64 --oltp-test-mode=complex run
