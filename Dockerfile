@@ -19,7 +19,8 @@ MAINTAINER frank@crystalconsulting.eu
 #RUN yum -y install epel-release; yum -y install git mariadb make automake libtool pkgconfig libaio-devel mariadb-devel postgresql-devel
 RUN yum -y install git mariadb make automake libtool pkgconfig libaio-devel mariadb-devel postgresql-devel
 
-RUN cd /root && git clone https://github.com/senax/sysbench.git
+RUN cd /root && git clone https://github.com/akopytov/sysbench.git
+# RUN cd /root && git clone https://github.com/senax/sysbench.git
 RUN cd /root/sysbench && ./autogen.sh && ./configure --with-pgsql && make -j2 && make install && rm -rf /root/sysbench
 
 ADD scripts/setup /usr/local/bin/setup
